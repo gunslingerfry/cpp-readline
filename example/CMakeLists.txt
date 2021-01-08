@@ -1,9 +1,13 @@
 #    /cpp-readline/example/CMakeLists.txt
 #
 #    @author zmij
-#    @date May 17, 2016
+#    @auther gunslingerfry
+#    @date 2021
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.10)
 
 add_executable(cpp-readline-example main.cpp)
-target_link_libraries(cpp-readline-example ${lib_name})
+target_link_libraries(cpp-readline-example
+    PRIVATE
+        cpp-readline::cpp-readline
+)

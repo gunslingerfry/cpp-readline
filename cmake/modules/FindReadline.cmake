@@ -23,7 +23,7 @@
 #  Readline_LIBRARY          The readline library.
 
 include(FindPackageHandleStandardArgs)
-if (Readline_INCLUDE_DIR)
+if (Readline_INCLUDE_DIRS)
     set(READLINE_FOUND TRUE)
 else()
     find_path(Readline_ROOT_DIR
@@ -40,14 +40,26 @@ else()
         HINTS ${Readline_ROOT_DIR}/lib
     )
 
-    if(Readline_INCLUDE_DIR AND Readline_LIBRARY AND Ncurses_LIBRARY)
+    if(Readline_INCLUDE_DIR AND Readline_LIBRARY)
       set(READLINE_FOUND TRUE)
-    else(Readline_INCLUDE_DIR AND Readline_LIBRARY AND Ncurses_LIBRARY)
-      FIND_LIBRARY(Readline_LIBRARY NAMES readline)
-      include(FindPackageHandleStandardArgs)
-      FIND_PACKAGE_HANDLE_STANDARD_ARGS(Readline DEFAULT_MSG Readline_INCLUDE_DIR Readline_LIBRARY )
-      MARK_AS_ADVANCED(Readline_INCLUDE_DIR Readline_LIBRARY)
-    endif(Readline_INCLUDE_DIR AND Readline_LIBRARY AND Ncurses_LIBRARY)
+    else()
+      find_library(Readline_LIBRARY NAMES readline)
+      find_package_handle_standard_args(Readline
+          DEFAULT_MSG Readline_INCLUDE_DIR Readline_LIBRARY
+      )
+      mark_as_advanced(Readline_INCLUDE_DIR Readline_LIBRARY)
+      set(READLINE_FOUND TRUE)
+    endif()
+    if (READLINE_FOUND AND NOT TARGET Readline::Readline)
+        message(STATUS "Readline found!")
+        set(Readline_INCLUDE_DIRS ${Readline_INCLUDE_DIR})
+        add_library(Readline::Readline SHARED IMPORTED)
+        set_target_properties(Readline::Readline
+            PROPERTIES
+                INTERFACE_INCLUDE_DIRS "${Readline_INCLUDE_DIR}"
+                IMPORTED_LOCATION "${Readline_LIBRARY}"
+        )
+    endif()
 
     mark_as_advanced(
         Readline_ROOT_DIR

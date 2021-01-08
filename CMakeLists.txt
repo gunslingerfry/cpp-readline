@@ -50,12 +50,12 @@ install(TARGETS ${PROJECT_NAME}
 install(EXPORT
     ${PROJECT_NAME}
     FILE ${PROJECT_NAME}-targets.cmake
-    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/cmake
+    DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}.cmake
     NAMESPACE ${PROJECT_NAME}::
 )
 configure_file(
-    cmake/${PROJECT_NAME}-config.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}-config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
     @ONLY
 )
 install(FILES
